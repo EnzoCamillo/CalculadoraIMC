@@ -1,107 +1,115 @@
-import React from 'react';
-import './InputForm.css';
+import { useState } from 'react';
+import './inputForm.css';
 
-const InputForm = ({ peso, altura, setPeso, setAltura, calcularIMC }) => {
-  const handleCalcular = () => {
-    calcularIMC();
-  };
+function InputForm({ onCalcular, onLimpar }) {
+  const [peso, setPeso] = useState('');
+  const [altura, setAltura] = useState('');
 
-  const formatarPeso = (valor) => {
-    const apenasNumeros = valor.replace(/\D/g, '');
+  // Máscara automática para o peso (formato: 00.0 ou 000.0)
+  const maskPeso = (valor) => {
+    valor = valor.replace(/\D/g, ''); // remove tudo que não for número
+    if (valor.length > 4) valor = valor.substring(0, 4); // limita a 4 dígitos
     
-    if (apenasNumeros.length === 0) return '';
-    
-    if (apenasNumeros.length >= 3) {
-      const inteiro = apenasNumeros.slice(0, -1);
-      const decimal = apenasNumeros.slice(-1);
-      return `${inteiro},${decimal}`;
+    if (valor.length === 4) {
+      return `${valor.substring(0, 3)}.${valor.substring(3)}`;
+    } else if (valor.length === 3) {
+      return `${valor.substring(0, 2)}.${valor.substring(2)}`;
+    } else if (valor.length === 2) {
+      return `${valor.substring(0, 2)}`;
+    } else {
+      return valor;
     }
-    
-    return apenasNumeros;
   };
 
-  const formatarAltura = (valor) => {
-    const apenasNumeros = valor.replace(/\D/g, '');
+  // Máscara automática para a altura (formato: 0.00)
+  const maskAltura = (valor) => {
+    valor = valor.replace(/\D/g, ''); // remove tudo que não for número
+    if (valor.length > 3) valor = valor.substring(0, 3); // limita a 3 dígitos
     
-    if (apenasNumeros.length === 0) return '';
-    
-    if (apenasNumeros.length >= 2) {
-      const inteiro = apenasNumeros.charAt(0);
-      const decimal = apenasNumeros.slice(1, 3);
-      return `${inteiro},${decimal}`;
+    if (valor.length === 3) {
+      return `${valor[0]}.${valor.substring(1)}`;
+    } else if (valor.length === 2) {
+      return `${valor[0]}.${valor[1]}`;
+    } else {
+      return valor;
     }
-    
-    return apenasNumeros;
-  };
-
-  const converterParaNumero = (valorFormatado) => {
-    return valorFormatado.replace(',', '.');
   };
 
   const handlePesoChange = (e) => {
-    const valorDigitado = e.target.value;
-    const valorFormatado = formatarPeso(valorDigitado);
-    
-    setPeso(converterParaNumero(valorFormatado));
+    const valorFormatado = maskPeso(e.target.value);
+    setPeso(valorFormatado);
   };
 
   const handleAlturaChange = (e) => {
-    const valorDigitado = e.target.value;
-    const valorFormatado = formatarAltura(valorDigitado);
-    
-    setAltura(converterParaNumero(valorFormatado));
+    const valorFormatado = maskAltura(e.target.value);
+    setAltura(valorFormatado);
   };
 
-  const exibirPeso = () => {
-    if (!peso) return '';
-    return peso.toString().replace('.', ',');
+  const handleSubmit = () => {
+    if (peso && altura) {
+      onCalcular(peso, altura);
+    }
   };
 
-  const exibirAltura = () => {
-    if (!altura) return '';
-    return altura.toString().replace('.', ',');
+  const handleReset = () => {
+    setPeso('');
+    setAltura('');
+    onLimpar();
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
   };
 
   return (
-    <div className="input-form">
-      <div className="form-container">
-        <div className="input-group">
-          <label className="input-label">
-            Peso (kg)
-          </label>
+    <div className="input-form-container">
+      <h1 className="input-form-title">Calculadora de IMC</h1>
+      <p className="input-form-subtitle">Índice de Massa Corporal</p>
+
+      <div className="input-form">
+        <div className="form-group">
+          <label htmlFor="peso" className="form-label">Peso (kg)</label>
           <input
+            id="peso"
             type="text"
-            value={exibirPeso()}
+            value={peso}
             onChange={handlePesoChange}
-            placeholder="Ex: 70,5"
+            onKeyPress={handleKeyPress}
+            placeholder="Ex: 70.5"
+            className="form-input"
             maxLength="5"
-            className="input-field"
           />
+          <span className="input-hint">Formato: 00.0 (máx. 999.9 kg)</span>
         </div>
-        
-        <div className="input-group">
-          <label className="input-label">
-            Altura (m)
-          </label>
+
+        <div className="form-group">
+          <label htmlFor="altura" className="form-label">Altura (m)</label>
           <input
+            id="altura"
             type="text"
-            value={exibirAltura()}
+            value={altura}
             onChange={handleAlturaChange}
-            placeholder="Ex: 1,75"
+            onKeyPress={handleKeyPress}
+            placeholder="Ex: 1.75"
+            className="form-input"
             maxLength="4"
-            className="input-field"
           />
+          <span className="input-hint">Formato: 0.00 (máx. 9.99 m)</span>
         </div>
-        
-        <button 
-          onClick={handleCalcular}
-          className="calculate-button"
-        >
-          Calcular IMC
-        </button>
+
+        <div className="button-group">
+          <button onClick={handleSubmit} className="btn-submit">
+            Calcular IMC
+          </button>
+          <button onClick={handleReset} className="btn-reset">
+            Limpar
+          </button>
+        </div>
       </div>
     </div>
   );
-};
+}
 
 export default InputForm;
