@@ -1,118 +1,235 @@
-.input-form-container {
-  background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  margin: 2rem auto;
-}
-
-.input-form-title {
-  font-size: 2rem;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
-  text-align: center;
-  font-weight: 700;
-}
-
-.input-form-subtitle {
-  text-align: center;
-  color: #718096;
-  margin-bottom: 2rem;
-  font-size: 1rem;
-}
-
 .input-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    0 8px 20px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  max-width: 440px;
+  margin: 2rem auto;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+  animation: formEnter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
+@keyframes formEnter {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
 }
 
-.form-label {
-  font-weight: 600;
-  color: #2d3748;
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
+/* Borda animada decorativa */
+.input-form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, 
+    #667eea 0%, 
+    #764ba2 25%,
+    #f093fb 50%,
+    #764ba2 75%,
+    #667eea 100%
+  );
+  background-size: 200% 100%;
+  animation: borderFlow 3s linear infinite;
 }
 
-.form-input {
+@keyframes borderFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* Efeito de luz ambiente */
+.input-form::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(102, 126, 234, 0.08) 0%,
+    transparent 50%
+  );
+  animation: ambientLight 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes ambientLight {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate(20px, 20px) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+.input-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 25px 70px rgba(0, 0, 0, 0.18),
+    0 10px 25px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.input-form:focus-within {
+  border-color: rgba(102, 126, 234, 0.3);
+  box-shadow: 
+    0 25px 70px rgba(102, 126, 234, 0.2),
+    0 10px 30px rgba(102, 126, 234, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.input-form h2 {
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  position: relative;
+  padding-bottom: 1rem;
+  animation: titleReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s backwards;
+  z-index: 1;
+}
+
+@keyframes titleReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+    letter-spacing: 5px;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    letter-spacing: -0.5px;
+  }
+}
+
+/* Linha decorativa sob o título */
+.input-form h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 3px;
+  box-shadow: 
+    0 2px 15px rgba(102, 126, 234, 0.5),
+    0 0 30px rgba(102, 126, 234, 0.3);
+  animation: lineExpand 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s backwards;
+}
+
+@keyframes lineExpand {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 70px;
+    opacity: 1;
+  }
+}
+
+/* Efeito de brilho no título */
+.input-form h2::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
-  padding: 0.75rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 5px;
-  font-size: 1rem;
-  box-sizing: border-box;
-  transition: border-color 0.3s;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: blur(25px);
+  opacity: 0.3;
+  z-index: -1;
 }
 
-.form-input:focus {
-  outline: none;
-  border-color: #4a5568;
+/* Conteúdo do form tem z-index para ficar acima do efeito de luz */
+.input-form > * {
+  position: relative;
+  z-index: 1;
 }
 
-.form-input::placeholder {
-  color: #a0aec0;
-}
-
-.input-hint {
-  font-size: 0.75rem;
-  color: #a0aec0;
-  margin-top: 0.25rem;
-  display: block;
-}
-
-.button-group {
-  display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.btn-submit,
-.btn-reset {
-  flex: 1;
-  padding: 0.75rem;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.btn-submit {
-  background: #4a5568;
-  color: white;
-}
-
-.btn-submit:hover {
-  background: #2d3748;
-}
-
-.btn-reset {
-  background: #e2e8f0;
-  color: #2d3748;
-}
-
-.btn-reset:hover {
-  background: #cbd5e0;
-}
-
+/* Responsividade */
 @media (max-width: 768px) {
-  .input-form-container {
-    padding: 1.5rem;
-    margin: 1rem;
+  .input-form {
+    padding: 2rem 1.5rem;
+    margin: 1.5rem 1rem;
+    border-radius: 16px;
   }
 
-  .input-form-title {
+  .input-form h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .input-form h2::after {
+    width: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .input-form {
+    padding: 1.75rem 1.25rem;
+    border-radius: 14px;
+    max-width: 100%;
+  }
+
+  .input-form h2 {
     font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.3px;
   }
 
-  .button-group {
-    flex-direction: column;
+  .input-form h2::after {
+    width: 50px;
+    height: 2px;
+  }
+}
+
+/* Acessibilidade - redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+  .input-form,
+  .input-form h2,
+  .input-form::before,
+  .input-form::after,
+  .input-form h2::after {
+    animation: none;
+  }
+
+  .input-form:hover {
+    transform: none;
   }
 }

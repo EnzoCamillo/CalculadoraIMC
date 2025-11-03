@@ -1,37 +1,241 @@
 .header {
-  background: rgb(51, 51, 51);
+  background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #1a202c 100%);
   color: white;
-  padding: 2rem 1rem;
+  padding: 3rem 1rem;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(102, 126, 234, 0.1) 50%,
+    transparent 100%
+  );
+  animation: headerShine 8s ease-in-out infinite;
+}
+
+@keyframes headerShine {
+  0%, 100% {
+    left: -100%;
+  }
+  50% {
+    left: 100%;
+  }
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, 
+    #667eea 0%, 
+    #764ba2 25%, 
+    #f093fb 50%, 
+    #764ba2 75%, 
+    #667eea 100%
+  );
+  background-size: 200% 100%;
+  animation: gradientFlow 4s linear infinite;
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
 }
 
 .header-content {
-  max-width: 800px;
+  max-width: 900px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  animation: headerContentFadeIn 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes headerContentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .header-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin: 0 0 0.5rem 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0 0 0.75rem 0;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: none;
+  letter-spacing: -1px;
+  line-height: 1.2;
+  animation: titleSlideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+  position: relative;
+  display: inline-block;
+}
+
+@keyframes titleSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.header-title::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: blur(20px);
+  opacity: 0.5;
 }
 
 .header-subtitle {
-  font-size: 1.2rem;
-  font-weight: 300;
+  font-size: 1.3rem;
+  font-weight: 400;
   margin: 0;
-  opacity: 0.9;
+  opacity: 0.95;
+  color: #e2e8f0;
+  letter-spacing: 0.5px;
+  animation: subtitleFadeIn 1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s backwards;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
+@keyframes subtitleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 0.95;
+    transform: translateY(0);
+  }
+}
+
+/* Efeito de partículas decorativas */
+.header-content::before,
+.header-content::after {
+  content: '';
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+  animation: float 6s ease-in-out infinite;
+}
+
+.header-content::before {
+  top: -50px;
+  left: 10%;
+}
+
+.header-content::after {
+  bottom: -50px;
+  right: 10%;
+  animation-delay: 3s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-20px) scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+/* Responsividade */
 @media (max-width: 768px) {
+  .header {
+    padding: 2.5rem 1rem;
+  }
+
   .header-title {
-    font-size: 2rem;
+    font-size: 2.25rem;
+    letter-spacing: -0.5px;
+  }
+  
+  .header-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .header-content::before,
+  .header-content::after {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 2rem 0.75rem;
+  }
+
+  .header-title {
+    font-size: 1.75rem;
+    margin-bottom: 0.5rem;
   }
   
   .header-subtitle {
     font-size: 1rem;
+    letter-spacing: 0.3px;
+  }
+
+  .header-content::before,
+  .header-content::after {
+    display: none;
+  }
+}
+
+/* Acessibilidade - redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+  .header::before,
+  .header::after,
+  .header-content::before,
+  .header-content::after {
+    animation: none;
+  }
+  
+  .header-title,
+  .header-subtitle,
+  .header-content {
+    animation: none;
   }
 }
